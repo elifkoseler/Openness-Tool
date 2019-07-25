@@ -51,7 +51,8 @@ namespace TiaCloud
 
             NetworkInterface interfacePN1 = interface1.GetService<NetworkInterface>();
             NodeComposition networkNodes1 = interfacePN1.Nodes;
-            networkNodes1.First().ConnectToSubnet(newSubnet);
+            networkNodes1.First().ConnectToSubnet(newSubnet);   //first connection
+
             //target device
             DeviceItem interface2 = null;
 
@@ -81,43 +82,6 @@ namespace TiaCloud
            networkNodes2.First().ConnectToSubnet(newSubnet);
 
             Console.WriteLine("Connected to " + newSubnet.GetAttribute("Name"));
-
-
-
-            //SubnetComposition subnets = project.Subnets;
-            //Subnet newSubnet = subnets.Create("System:Subnet.Asi", "ASI");
-
-            ////prepare 1 PLC start
-            //Device device = project.Devices.Create("System:Device.ASi", "ASI_Name" + Guid.NewGuid().ToString());
-            //DeviceItem rack = device.PlugNew("System:Rack.ASi", "Rack_Name" + Guid.NewGuid().ToString(), 0);
-            //DeviceItem head = rack.PlugNew("OrderNumber:AS-i F Slave Universal", "Head_name" + Guid.NewGuid().ToString(), 1);
-            ////DeviceItem head = DeviceItemMethods.getHead(plc); //getHead bozuk baklması gerekiyor
-
-
-            //////our first connection
-            //DeviceItem plcInterface =
-            //    (from DeviceItem di in head.DeviceItems
-            //     where di.Name.Contains("AS-Interface")
-            //     select di).First();
-            ////find interface deviceitem
-
-            //NetworkInterface interfacePN = plcInterface?.GetService<NetworkInterface>();    //now get interface service from it
-            //NodeComposition plcNetworkNodes = interfacePN.Nodes;                            //one interface can have several ports
-            //plcNetworkNodes.First().ConnectToSubnet(newSubnet);                             //connect to our PN bus. note that this plc can also connect to DP bus if needed
-            //Console.WriteLine(plcInterface.Name + " connected to subnet");
-
-            //Device device2 = project.Devices.Create("System:Device.ASi", "ASI_Name" + Guid.NewGuid().ToString());
-            //DeviceItem rack2 = device2.PlugNew("System:Rack.ASi", "Rack_Name" + Guid.NewGuid().ToString(), 0);
-            //DeviceItem head2 = rack2.PlugNew("OrderNumber:AS-i F Slave Universal", "Head_name" + Guid.NewGuid().ToString(), 1);
-            ////our first connection
-            //DeviceItem plcInterface2 =
-            //    (from DeviceItem di in head2.DeviceItems
-            //     where di.Name.Contains("AS-Interface")
-            //     select di).First();                                                        //find interface deviceitem
-            //NetworkInterface interfacePN2 = plcInterface2?.GetService<NetworkInterface>();    //now get interface service from it
-            //NodeComposition plcNetworkNodes2 = interfacePN2.Nodes;                            //one interface can have several ports
-            //plcNetworkNodes2.First().ConnectToSubnet(newSubnet);                             //connect to our PN bus. note that this plc can also connect to DP bus if needed
-            //Console.WriteLine(plcInterface.Name + " connected to subnet");
 
         }
 
@@ -167,13 +131,10 @@ namespace TiaCloud
             
             //IoController plcIoController = interfacePN1.IoControllers.First();
             //IoSystem plcIoSystem = plcIoController?.CreateIoSystem("myIoSystem" + Guid.NewGuid().ToString());
-            //IoConnector ioConnector = null;
-            networkNodes1.First().ConnectToSubnet(newSubnet);
-            //ioConnector = interfacePN1.IoConnectors.First();
-            //ioConnector.ConnectToIoSystem(plcIoSystem);
+            //IoConnector ioConnector = null; //IoController feature is in construction
 
-            //connection to the subnet
-            //target device
+            networkNodes1.First().ConnectToSubnet(newSubnet);
+           
             DeviceItem interface2 = null;
 
             if (device2.Name.Contains("PLC"))
@@ -296,56 +257,66 @@ namespace TiaCloud
 
 
         }
-        public static bool isConnected(Project project,Device device)
+     
+        public static void multiConnection(Project project, int sourceIndex, int targetIndex)
         {
             var allSubnets = project.Subnets;
             var allDevices = project.Devices;
 
-            Device theDevice = allDevices.Find(device.Name);    
-            DeviceItem theHead = DeviceItemMethods.GetHead(device);
-            DeviceItem Interface =
-                 (from DeviceItem di in theHead.DeviceItems
-                  where di.Name.Contains("interface")
-                  select di).First();
-            NetworkInterface networkInterface = Interface.GetService<NetworkInterface>();
-            NodeComposition nodes = networkInterface.Nodes;
-            Node interfaceNode = nodes.First();
+            Device source = allDevices[sourceIndex];
+            Device target = allDevices[targetIndex];
 
-            Console.WriteLine(device.Name + " is connected to: ");
-            Console.WriteLine(interfaceNode.ConnectedSubnet.Name);
+            DeviceItem sourceHead = null;
+            DeviceItem targetHead = null;
 
-            string name = interfaceNode.ConnectedSubnet.Name;
-            if (name != null)
-                return true;
+            if (source.Name.Contains("PLC"))    //source head
+            {
+                sourceHead = DeviceItemMethods.GetPlcHead(source);
+            }
             else
-                return false;
+                sourceHead = DeviceItemMethods.GetHead(source);
 
-            
-        }
 
-        public static bool isPLCconnected(Project project, Device device)
-        {
-            var allSubnets = project.Subnets;
-            var allDevices = project.Devices;
-
-            Device theDevice = allDevices.Find(device.Name);
-            DeviceItem theHead = DeviceItemMethods.GetPlcHead(device);
-            DeviceItem Interface =
-                 (from DeviceItem di in theHead.DeviceItems
-                  where di.Name.Contains("DP") || di.Name.Contains("MPI")
-                  select di).First();
-            NetworkInterface networkInterface = Interface.GetService<NetworkInterface>();
-            NodeComposition nodes = networkInterface.Nodes;
-            Node interfaceNode = nodes.First();
-
-            Console.WriteLine(device.Name + "  is connected to:  ");
-            Console.WriteLine(interfaceNode.ConnectedSubnet.Name +"\n");
-            
-            string name = interfaceNode.ConnectedSubnet.Name;
-            if (name != null)
-                return true;
+            if (target.Name.Contains("PLC"))    //target head
+            {
+                targetHead = DeviceItemMethods.GetPlcHead(target);
+            }
             else
-                return false;
+                targetHead = DeviceItemMethods.GetHead(target);
+
+            DeviceItem sourceInterface =
+                 (from DeviceItem di in sourceHead .DeviceItems
+                  where di.Name.Contains("interface") || di.Name.Contains("MPI") || di.Name.Contains("DP") || di.Name.Contains("ASI")
+                  select di).First();
+
+            Console.WriteLine("-sourceInterface Name: "+sourceInterface.Name); 
+
+            NetworkInterface sourceNetworkInterface = sourceInterface.GetService<NetworkInterface>();
+            Node sourceNode = sourceNetworkInterface.Nodes.First();
+
+            Console.WriteLine("--sourceNode Name: "+sourceNode.Name);
+
+            DeviceItem targetInterface =
+                 (from DeviceItem di in targetHead.DeviceItems
+                  where di.Name.Contains("DP") || di.Name.Contains("MPI") || di.Name.Contains("interface") || di.Name.Contains("ASI")
+                  select di).First();
+
+            //multiple connection is impossible on same device, such as simatic2
+            //because the function always gets just first node of the interface
+
+            Console.WriteLine("-targetInterface Name: " + targetInterface.Name);
+
+            NetworkInterface targetNetworkInterface = targetInterface.GetService<NetworkInterface>();
+            Node targetNode = targetNetworkInterface.Nodes.First();
+
+            Console.WriteLine("--targetNode Name: " + targetNode.Name);
+
+            Console.WriteLine("SUBNET NAMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE::::::::::::::::::::::::::::.");
+            Console.WriteLine(targetNode.ConnectedSubnet.GetAttribute("Name"));
+
+            sourceNode.ConnectToSubnet(targetNode.ConnectedSubnet);
+
+
         }
 
         //First,follow the path: project > device > deviceItem > interface > nodes > node
@@ -353,41 +324,49 @@ namespace TiaCloud
         //then, if is connected ? 
         //if there is no connection apply same function with small changes
 
-        public static void selectConnection(Project project ,int sourceIndex, int targetIndex, string typeIdentifier)
+        public static void selectConnection(Project project ,int sourceIndex, int targetIndex, string typeIdentifier,string command)
         {
-            SubnetComposition subnets = project.Subnets;
-            switch (typeIdentifier)
+            if(command == "multiCon")
             {
-                case "PN":
-                case "pn":
-                    connectToPN(project, sourceIndex, targetIndex);
-                    break;
-
-                case "pb":
-                case "PB":
-                    connectToPB(project, sourceIndex, targetIndex);
-
-                    break;
-
-                case "mpi":
-                case "MPI":
-                    connectToMPI(project, sourceIndex, targetIndex);
-
-                    break;
-
-                case "asi":
-                case "ASI":
-                    connectToASI(project, sourceIndex, targetIndex);
-
-                    break;
-
-                default:
-                    Console.WriteLine("DEFAULT!");
-                    connectToPN(project, sourceIndex, targetIndex);
-
-                    break;
+                Console.WriteLine("selectConnection func. enterance");
+                multiConnection(project, sourceIndex, targetIndex);
+                Console.WriteLine("selectConnection func. exit");
             }
-           
+
+            else
+            { 
+                switch (typeIdentifier)
+                {
+                    case "PN":
+                    case "pn":
+                        connectToPN(project, sourceIndex, targetIndex);
+                        break;
+
+                    case "pb":
+                    case "PB":
+                        connectToPB(project, sourceIndex, targetIndex);
+
+                        break;
+
+                    case "mpi":
+                    case "MPI":
+                        connectToMPI(project, sourceIndex, targetIndex);
+
+                        break;
+
+                    case "asi":
+                    case "ASI":
+                        connectToASI(project, sourceIndex, targetIndex);
+
+                        break;
+
+                    default:
+                        Console.WriteLine("DEFAULT CONNECTION!");
+                        connectToPN(project, sourceIndex, targetIndex);
+
+                        break;
+                }
+            }
         }
     }
 }

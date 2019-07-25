@@ -18,7 +18,7 @@ namespace TiaCloud
                 case "SIMO":
                 case "simocode"://it just supports PN
 
-                    device = project.Devices.Create("System:Device.Simocode", "Controller_SimocodePRO PN_Name" + Guid.NewGuid().ToString());   //guid = random 
+                    device = project.Devices.Create("System:Device.Simocode", "SimocodePRO PN_Name" + Guid.NewGuid().ToString());   //guid = random 
                     rack = device.PlugNew("System:Rack.SimocodeProPN", "Rack_Name" + Guid.NewGuid().ToString(), 0);
                     head = rack.PlugNew("OrderNumber:3UF7 011-1A*00-0/V2.0", "Simocode1_" + Guid.NewGuid().ToString(), 0);
                     Console.WriteLine("Added " + head.GetAttribute("Name"));
@@ -44,7 +44,7 @@ namespace TiaCloud
                     break;
 
                 case "SIM2":
-                case "simatic2":
+                case "simatic2":    //it supports PN and PB connections
 
                     device = project.Devices.Create("System:Device.S71500", "PLC_s71500_Name" + Guid.NewGuid().ToString());
                     rack = device.PlugNew("OrderNumber:6ES7 590-1***0-0AA0", "Rack_Name" + Guid.NewGuid().ToString(), 0);
@@ -53,7 +53,7 @@ namespace TiaCloud
                     break;
 
                 case "SIM3":
-                case "simatic3":
+                case "simatic3":    //it just supports PN
 
                     device = project.Devices.Create("System:Device.S71500", "PLC_s71500_Name" + Guid.NewGuid().ToString());
                     rack = device.PlugNew("OrderNumber:6ES7 590-1***0-0AA0", "Rack_Name" + Guid.NewGuid().ToString(), 0);
@@ -61,16 +61,9 @@ namespace TiaCloud
                     Console.WriteLine("Added " + head.GetAttribute("Name"));
                     break;
 
-                case "SIMO2":
-                case "simocode2":
-
-                    device = project.Devices.Create("System:Device.Simocode", "Controller_SimocodePRO V_Name" + Guid.NewGuid().ToString()); 
-                    rack = device.PlugNew("System:Rack.SimocodePro", "Rack_Name" + Guid.NewGuid().ToString(), 0);
-                    head = rack.PlugNew("OrderNumber:3UF7 010-1A*00-0/V4.1", "Simocode2_" + Guid.NewGuid().ToString(), 2);
-                    Console.WriteLine("Added " + head.GetAttribute("Name"));
-
+                default:
+                    Console.WriteLine("DEFAULT CASE!");
                     break;
-
 
             }
             Console.WriteLine("Added");
@@ -95,7 +88,7 @@ namespace TiaCloud
 
         }
 
-        public static void DeleteDevice(Project project, string DeviceName)
+        public static void DeleteDevice(Project project, string DeviceName) //It doesn't work, in construction
         {
             DeviceComposition devices = project.Devices;
             Device foundDevice = devices.Find(DeviceName);//find first
@@ -119,7 +112,7 @@ namespace TiaCloud
             }
         }
 
-        public static void DeleteSpecificDevice(Project project, Device deviceToDelete)
+        public static void DeleteSpecificDevice(Project project, Device deviceToDelete) //It doesn't work, in construction
         {
             if (project.UngroupedDevicesGroup.Devices.Contains(deviceToDelete))
                 deviceToDelete.Delete();
@@ -128,7 +121,7 @@ namespace TiaCloud
 
         }
 
-        public static void DisplayDeviceNames(Project project)
+        public static void DisplayDeviceNames(Project project)  //display all devices name on consoless
         {
             var allDevices = project.Devices;
             int i = 0;
@@ -148,43 +141,53 @@ namespace TiaCloud
 
         }
       
-        public static void ChangeProperties(Project project, int index,string name,string author,string comment) 
+        public static void ChangeProperties(Project project, int index,string name,string author,string comment)    //change some properties of device head
         {
             Device device = GetDevice(project, index);
+            DeviceItem head = null;
+            if (device.Name.Contains("PLC"))
+            {
+                head = DeviceItemMethods.GetPlcHead(device);
+            }
+
+            else
+            {
+                head = DeviceItemMethods.GetHead(device);
+            }
 
             if (name != null && name != "x")
             {
-                Console.WriteLine(device.GetAttribute("Name"));
-                device.SetAttribute("Name", name);
-                Console.WriteLine(device.GetAttribute("Name"));
+                Console.WriteLine(head.GetAttribute("Name"));
+                head.SetAttribute("Name", name);
+                Console.WriteLine(head.GetAttribute("Name"));
 
             }
             else {
-                Console.WriteLine(device.GetAttribute("Name"));
+                Console.WriteLine(head.GetAttribute("Name"));
             }
 
             if (author != null && author != "x")
             {
-                Console.WriteLine(device.GetAttribute("Author"));
-                device.SetAttribute("Author", author);
-                Console.WriteLine(device.GetAttribute("Author"));
+                Console.WriteLine(head.GetAttribute("Author"));
+                head.SetAttribute("Author", author);
+                Console.WriteLine(head.GetAttribute("Author"));
 
             }
             else
             {
-                Console.WriteLine(device.GetAttribute("Author"));
+                Console.WriteLine(head.GetAttribute("Author"));
             }
 
             if (comment != null && comment != "x")
             {
-                Console.WriteLine(device.GetAttribute("Comment"));
-                device.SetAttribute("Comment", comment);
-                Console.WriteLine(device.GetAttribute("Comment"));
+                Console.WriteLine(head.GetAttribute("Comment"));
+                head.SetAttribute("Comment", comment);
+                Console.WriteLine(head.GetAttribute("Comment"));
 
             }
             else
             {
-                Console.WriteLine(device.GetAttribute("Comment"));
+                Console.WriteLine(head.GetAttribute("Comment"));
             }
 
             Console.WriteLine("Properties is changed!");

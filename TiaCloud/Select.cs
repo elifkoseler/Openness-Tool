@@ -1,5 +1,4 @@
 ﻿using Siemens.Engineering;
-using Siemens.Engineering.HW;
 using System;
 namespace TiaCloud
 {
@@ -8,9 +7,10 @@ namespace TiaCloud
         public static string FunctionSelector(Project project,string [] tokens)
         {
             string command = tokens[0];
-
+            
             switch (command)
             {
+
                 case "add":
                 case "ADD":
                     
@@ -26,7 +26,19 @@ namespace TiaCloud
                     int targetDevice = int.Parse(tokens[2]);
                     string typeIdentifier = tokens[3];
 
-                    Network.selectConnection(project, sourceDevice, targetDevice,typeIdentifier);
+                    Network.selectConnection(project, sourceDevice, targetDevice,typeIdentifier,command);
+                    MainMethods.DisplayNetwork(project);
+
+                    break;
+
+                case "multiCON":
+                case "multiCon":
+
+                    sourceDevice = int.Parse(tokens[1]);
+                    targetDevice = int.Parse(tokens[2]);
+                    typeIdentifier = tokens[3];
+
+                    Network.selectConnection(project, sourceDevice, targetDevice, typeIdentifier,command);
                     MainMethods.DisplayNetwork(project);
 
                     break;
@@ -34,33 +46,24 @@ namespace TiaCloud
                 case "COMPILE":
                 case "compile":
 
-                    int id = int.Parse(tokens[1]);
-                    string message = MainMethods.Compile(project, id);
+                    int index = int.Parse(tokens[1]);
+                    string message = MainMethods.Compile(project, index);
                     return message;
                     
 
-                case "isCon":
-                    int deviceIndex = int.Parse(tokens[1]);
-                    bool res = false;
-                    Device device =  project.Devices[deviceIndex];
-
-                    if (device.Name.Contains("PLC"))
-                        res = Network.isPLCconnected(project, device);
-                    else
-                        res =  Network.isConnected(project, project.Devices[deviceIndex]);
-
-                    if (res == true)
-                        Console.WriteLine("Connected");
-                    else
-                        Console.WriteLine("Not Connected");
-
-                    break;
+                //case "isCon":
+                //    int deviceIndex = int.Parse(tokens[1]);
+                //    subnet = Network.multiConnection(project, deviceIndex);
+                //    Console.WriteLine(project.Devices[deviceIndex].Name + " is connected to " + subnet.Name);
+                //    break;
 
                 case "SAVE":
+                case "save":
                     MainMethods.Save(project);
                     break;
 
                 case "CLOSE":
+                case "close":
                     MainMethods.Close(project);
                     break;
 
@@ -70,7 +73,7 @@ namespace TiaCloud
 
                 case "change":
                 case "CHANGE":
-                    int index = int.Parse(tokens[1]);
+                    index = int.Parse(tokens[1]);
                     string name = tokens[2];
                     string author = tokens[3];
                     string comment = tokens[4];

@@ -7,7 +7,7 @@ namespace TiaCloud
 {
     class DeviceItemMethods
     {   
-        public static DeviceItem GetHead(Device device) //gets Head of the device
+        public static DeviceItem GetHead(Device device) //gets Head of the device, except PLCs
         {
             foreach (DeviceItem deviceItem in device.DeviceItems)
             {
@@ -19,7 +19,7 @@ namespace TiaCloud
 
         public static DeviceItem GetPlcHead(Device device)  //gets head of PLCs
         {
-            return device.DeviceItems[1];   //rail=>[0], head=>[1]
+            return device.DeviceItems[1];   //rail=>[0], head=>[1] :: it is valid for PLCs
         }
 
         public static PlcSoftware GetPlcSoftware(Device device) //gets Plc SW of the device
@@ -56,11 +56,6 @@ namespace TiaCloud
             return null;
         }
 
-        public static DeviceItem AccessDeviceItemFromDevice(Device device)
-        {
-            DeviceItem deviceItem = device.DeviceItems[0];
-            return deviceItem;
-        }
 
     }
 

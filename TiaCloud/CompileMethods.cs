@@ -8,20 +8,22 @@ namespace TiaCloud
 {
     class CompileMethods
     {
-        public static string CompilePlcSoftware(PlcSoftware plcSoftware)  //it will be fixed
+        public static string CompilePlcSoftware(PlcSoftware plcSoftware) 
         {
             string message = null;
-            ICompilable compilePLC = plcSoftware.GetService<ICompilable>(); //plcSotfware is null for a now, so exception unhandled.
+            ICompilable compilePLC = plcSoftware.GetService<ICompilable>(); 
             CompilerResult result = compilePLC.Compile();
             message = WriteCompilerResults(result);
             return message;
         }
 
-        public static void CompileHmiTarget(HmiTarget hmiTarget)
+        public static string CompileHmiTarget(HmiTarget hmiTarget)
         {
+            string message = null;
             ICompilable compileHMI = hmiTarget.GetService<ICompilable>();
             CompilerResult result = compileHMI.Compile();
-            WriteCompilerResults(result);
+            message = WriteCompilerResults(result);
+            return message;
 
         }
 
@@ -47,21 +49,20 @@ namespace TiaCloud
             Console.WriteLine("State:" + result.State);
             Console.WriteLine("Warning Count:" + result.WarningCount);
             Console.WriteLine("Error Count:" + result.ErrorCount);
-            // message =  RecursivelyWriteMessages(result.Messages);
+            // message =  RecursivelyWriteMessages(result.Messages); //it can be developed with recursive function
             foreach (CompilerResultMessage me in result.Messages)
             {
                 message += "\n\n Path: " + me.Path;
                 message += "\n DateTime: " + me.DateTime;
                 message += "\n State: " + me.State;
                 message += "\n Description: " + me.Description;
-                //message += "\n State:" + result.State;
                 message += "\n Warning Count:" + result.WarningCount;
                 message += "\n Error Count: " + result.ErrorCount;
 
             }
             return message;
         }
-        //private static string RecursivelyWriteMessages(CompilerResultMessageComposition messages, string indent = "")
+        //private static string RecursivelyWriteMessages(CompilerResultMessageComposition messages, string indent = "") 
         //{
         //    indent += "\t";
         //    foreach (CompilerResultMessage message in messages)
