@@ -1,4 +1,8 @@
-﻿using System;
+/*
+    Author: Elif Köseler
+    Date:   29.07.19
+*/
+using System;
 using System.IO;
 using Siemens.Engineering;
 
