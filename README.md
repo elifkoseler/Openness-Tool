@@ -1,5 +1,6 @@
 # Openness-Tool
 TIA Portal Cloud Web Application with using Openness
+---
 
 #### I. Introduction
 
@@ -8,8 +9,12 @@ A web program, a socket program which contains two sockets and an Openness progr
 To sum up, web application sends commands to medium socket program after that it sends received commands to Openness program. 
 Openness program parses commands and applies on to TIA Portal 
 and then it replies to medium socket program in connection with web application.
+---
 
-###### *The document will be added as soon as possible...*
-* Project Structure:
+#### II.  Project Structure
 
-![alt text](https://github.com/elifkoseler/Openness-Tool/blob/master/project_structure.png "Logo Title Text 1")
+* ![alt text](https://github.com/elifkoseler/Openness-Tool/blob/master/project_structure.png "Main Diagram of the project")
+
+> created by @onayem
+---
+###### *The continuation of the document will be added as soon as possible.*
