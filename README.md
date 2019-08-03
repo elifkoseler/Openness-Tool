@@ -13,8 +13,8 @@ and then it replies to medium socket program in connection with web application.
 
 #### II.  Project Structure
 
-* ![alt text](https://github.com/elifkoseler/Openness-Tool/blob/master/project_structure.png "Main Diagram of the project")
+![alt text](https://github.com/elifkoseler/Openness-Tool/blob/master/project_structure.png "Main Diagram of the project")
 
-> created by @onayem
+ *png is created by [Emre Onay](https://github.com/onayem "onayem")*
 ---
 ###### *The continuation of the document will be added as soon as possible.*
