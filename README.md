@@ -15,6 +15,7 @@ and then it replies to medium socket program in connection with web application.
 
 ![alt text](https://github.com/elifkoseler/Openness-Tool/blob/master/project_structure.png "Main Diagram of the project")
 
- *png is created by [Emre Onay](https://github.com/onayem "onayem")*
+> *Diagram is created by @onayem [Emre Onay](https://github.com/onayem)*
+
 ---
 ###### *The continuation of the document will be added as soon as possible.*
