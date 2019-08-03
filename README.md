@@ -10,3 +10,6 @@ Openness program parses commands and applies on to TIA Portal
 and then it replies to medium socket program in connection with web application.
 
 ###### *The document will be added as soon as possible...*
+* Project Structure:
+
+![alt text](https://github.com/elifkoseler/Openness-Tool/blob/master/project_structure.png "Logo Title Text 1")
