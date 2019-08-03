@@ -19,4 +19,6 @@ and then it replies to medium socket program in connection with web application.
 > *Diagram is created by @onayem [Emre Onay](https://github.com/onayem)*
 
 ---
+
+
 ###### *The continuation of the document will be added as soon as possible.*
