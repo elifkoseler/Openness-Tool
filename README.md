@@ -22,3 +22,9 @@ and then it replies to medium socket program in connection with web application.
 
 
 ###### *The continuation of the document will be added as soon as possible.*
+
+---
+
+> *GNU GENERAL PUBLIC LICENSE*
+
+> *Version 3, 29 June 2007*
