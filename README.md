@@ -3,7 +3,7 @@
 
 ---
 
-#### I. Introduction
+#### I. :computer: Introduction
 
 * The aim of the project is creating an application that can control TIA Portal with help of the Openness on web.
 A web program, a socket program which contains two sockets and an Openness program are used in project. 
@@ -12,7 +12,7 @@ Openness program parses commands and applies on to TIA Portal
 and then it replies to medium socket program in connection with web application.
 ---
 
-#### II.  Project Structure
+#### II. :house_with_garden: Project Structure
 
 ![docs/project_structure.png](docs/project_structure.png "Main Diagram of the project")
 
@@ -21,7 +21,7 @@ and then it replies to medium socket program in connection with web application.
 ---
 
 
-#### * Detailed report of the project: ![docs/Internship Report.pdf]( docs/Internship Report.pdf "Detailed report of the project")*
+#### III. :mag_right: [Detailed report of the project](https://github.com/elifkoseler/Openness-Tool/blob/master/docs/Internship%20Report.pdf)
 
 ---
 
