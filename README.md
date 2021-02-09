@@ -21,7 +21,7 @@ and then it replies to medium socket program in connection with web application.
 ---
 
 
-###### *The continuation of the document will be added as soon as possible.*
+#### * Detailed report of the project: ![docs/Internship Report.pdf]( docs/Internship Report.pdf "Detailed report of the project")*
 
 ---
 
